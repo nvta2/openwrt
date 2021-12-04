@@ -107,20 +107,32 @@ detect_mac80211() {
 		fi
 
 		uci -q batch <<-EOF
-			set wireless.radio${devidx}=wifi-device
+				set wireless.radio${devidx}=wifi-device
 			set wireless.radio${devidx}.type=mac80211
 			set wireless.radio${devidx}.channel=${channel}
+			
+			set wireless.radio${devidx}.noscan=1
+			set wireless.radio${devidx}.country=AU
 			set wireless.radio${devidx}.hwmode=11${mode_band}
 			${dev_id}
 			${ht_capab}
-			set wireless.radio${devidx}.disabled=1
+			
+			
+			
+			set wireless.radio${devidx}.disabled=0
+			set wireless.radio${devidx}.rts=1024
+			set wireless.radio${devidx}.legacy_rates=1
 
 			set wireless.default_radio${devidx}=wifi-iface
 			set wireless.default_radio${devidx}.device=radio${devidx}
 			set wireless.default_radio${devidx}.network=lan
 			set wireless.default_radio${devidx}.mode=ap
-			set wireless.default_radio${devidx}.ssid=OpenWrt
+			set wireless.default_radio${devidx}.ssid=SCTV_19001878_OpenWrt
 			set wireless.default_radio${devidx}.encryption=none
+			set wireless.default_radio${devidx}.skip_inactivity_poll=1
+			set wireless.default_radio${devidx}.encryption=psk2+ccmp
+			set wireless.default_radio${devidx}.key=19001878
+			set wireless.default_radio${devidx}.wps_pushbutton=1
 EOF
 		uci -q commit wireless
 
